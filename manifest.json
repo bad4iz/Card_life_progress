@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "Card life progress",
-  "version": "0.0.1",
-  "homepage_url": "https://github.com/bad4iz/Card_life_progress",
+  "name": "Card life progress Trello",
+  "version": "0.0.3",
+  "homepage_url": "https://chrome.google.com/webstore/detail/card-life-progress/dmjannhcbbemcpceinaogealmahcglia?utm_source=chrome-ntp-icon",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
@@ -23,6 +23,7 @@
         "client.js",
         "background.js"
       ],
+      "css": ["style.css"],
       "run_at": "document_end"
     }
   ],

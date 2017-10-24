@@ -9,7 +9,7 @@ if (!trello_token) {
   button.style.position = 'absolute';
   button.style.top = '200px';
   button.style.left = '200px';
-  button.innerText = 'авторизовать в трело'
+  button.innerText = 'авторизовать в трело';
   button.onclick = () => {
 
     var trello_token = localStorage.getItem('trello_token');
@@ -51,27 +51,55 @@ if (!trello_token) {
       const listCardTitles = document.querySelectorAll('.list-card-title');
       listCardTitles.forEach(item => {
         const hour = +res[item.firstChild.innerText.substr(1)].time;
-        let color, title;
+        let units, progress, color, title;
         if(hour <= 24){
+          progress = Math.floor(hour/24*100);
           color = 'green';
-          title = 'день';
+          title = 'часы';
+          units =  Math.floor(hour);
         }
         if(24 < hour && hour <= 168){
           color = 'blue';
-          title = 'неделя';
+          title = 'дни';
+          progress = Math.floor(hour / 24 /7*100);
+          units =  Math.floor(hour/24);
 
         }
         if(168 < hour && hour <= 720){
           color = 'red';
-          title = 'месяц';
+          title = 'недели';
+          progress = Math.floor(hour / 168 /4*100);
+          units =  Math.floor(hour/168);
 
         }
         if(hour > 720 ){
           color = 'black';
-          title = 'более месяца';
+          title = 'месяцы';
+          progress = Math.floor(hour / 720 /4*100);
+          units =  Math.floor(hour/720);
+
         }
-        item.style.backgroundColor = color;
-        item.setAttribute('title' , title);
+        // item.style.backgroundColor = color;
+        // item.setAttribute('title' , title);
+
+        const progressAging = document.createElement('div');
+        progressAging.className = 'progress-aging';
+
+        const titleProg = document.createElement('div');
+        titleProg.className = 'title';
+        titleProg.innerText = units + ' ' + title;
+
+        const scale  = document.createElement('div');
+        scale .className = 'scale ';
+        scale .style.width = progress + '%';
+        scale .style.backgroundColor = color;
+
+        progressAging.appendChild(scale );
+        progressAging.appendChild(titleProg);
+
+
+        item.parentNode.parentNode.appendChild(progressAging);
+        item.parentNode.parentNode.setAttribute('title', units + ' ' + title);
       })
     })
     .catch(alert);

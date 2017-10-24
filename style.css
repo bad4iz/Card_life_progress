@@ -1,0 +1,20 @@
+.progress-aging {
+    bottom: 0;
+    width: 100%;
+    position: absolute;
+    height: 50%;
+
+    z-index: 0;
+}
+.scale{
+    height: 100%;
+    background: azure;
+    position: absolute;
+
+}
+.progress-aging > .title {
+    position: absolute;
+    bottom: 10px;
+    left:40%;
+
+}
