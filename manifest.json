@@ -1,0 +1,32 @@
+{
+  "manifest_version": 2,
+  "name": "Card life progress",
+  "version": "0.0.1",
+  "homepage_url": "https://github.com/bad4iz/theme-developer-tools",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "description": "sdf",
+  "permissions": [
+    "bookmarks"
+  ],
+  "content_security_policy": "script-src 'self' https://ajax.googleapis.com; object-src 'self'",
+  "content_scripts": [
+    {
+      "matches": [
+        "*://trello.com/*"
+      ],
+      "js": [
+        "jquery.js",
+        "client.js",
+        "background.js"
+      ],
+      "run_at": "document_end"
+    }
+  ],
+  "web_accessible_resources": [
+    "trello.js"
+  ]
+}
