@@ -1,20 +1,27 @@
 .progress-aging {
     bottom: 0;
     width: 100%;
-    position: absolute;
-    height: 50%;
-
+    position: relative;
+    height: 10px;
+    margin-bottom: 1px;
     z-index: 0;
 }
 .scale{
     height: 100%;
     background: azure;
     position: absolute;
+    opacity: .3;
 
 }
 .progress-aging > .title {
     position: absolute;
-    bottom: 10px;
+    font-size: 11px;
+    bottom: -3px;
     left:40%;
+    text-shadow: 0px 0px 3px #ffffff;
+
+}
+.card-short-id{
+    margin-right: 5px;
 
 }

@@ -51,19 +51,27 @@ if (!trello_token) {
       const listCardTitles = document.querySelectorAll('.list-card-title');
       listCardTitles.forEach(item => {
         const hour = +res[item.firstChild.innerText.substr(1)].time;
+        item.firstChild.classList.remove('hide');
         let units, progress, color, title;
         if(hour <= 24){
           progress = Math.floor(hour/24*100);
           color = 'green';
           title = 'часы';
           units =  Math.floor(hour);
+          if (units == 1){
+            title = 'час назад';
+            units = '';
+          }
         }
         if(24 < hour && hour <= 168){
           color = 'blue';
           title = 'дни';
           progress = Math.floor(hour / 24 /7*100);
           units =  Math.floor(hour/24);
-
+          if (units == 1){
+            title = 'вчера';
+            units = '';
+          }
         }
         if(168 < hour && hour <= 720){
           color = 'red';
@@ -75,7 +83,7 @@ if (!trello_token) {
         if(hour > 720 ){
           color = 'black';
           title = 'месяцы';
-          progress = Math.floor(hour / 720 /4*100);
+          progress = Math.floor(hour / 720 /12*100);
           units =  Math.floor(hour/720);
 
         }
@@ -87,7 +95,7 @@ if (!trello_token) {
 
         const titleProg = document.createElement('div');
         titleProg.className = 'title';
-        titleProg.innerText = units + ' ' + title;
+        titleProg.innerText =  title;
 
         const scale  = document.createElement('div');
         scale .className = 'scale ';
@@ -99,7 +107,7 @@ if (!trello_token) {
 
 
         item.parentNode.parentNode.appendChild(progressAging);
-        item.parentNode.parentNode.setAttribute('title', units + ' ' + title);
+        item.parentNode.parentNode.setAttribute('title', units );
       })
     })
     .catch(alert);
