@@ -32,90 +32,7 @@ if (!trello_token) {
 
 } else {
   window.onload = function () {
-    const a = document.querySelector('a.js-open-board');
-    const boardHref = a.getAttribute('href');
-    const board = boardHref.split('/')[2];
-
-    fetch('https://api.trello.com/1/boards/' + board + '/cards/?fields=dateLastActivity&fields=name,url,idShort&members=true&member_fields=fullName&key=05b346464415bc4c17b95472a274deee&token=' + trello_token)
-      .then(function (response) {
-        return response.json();
-      })
-      .then(function (response) {
-        const now = Date.now();
-        response.forEach(item => {
-          let time = Math.round((now - Date.parse(item.dateLastActivity)) / (3600 * 1000 ));
-          item.time = time;
-          // console.log('name ' + item.name + ' idShort = ' + item.idShort + ' | время с последнего обновления - ' + time);
-          // console.log(item.url.substr(18));
-          arrAging[item.idShort] = item;
-        });
-        return arrAging;
-      })
-      .then(res => {
-        const listCardTitles = document.querySelectorAll('.list-card-title');
-        listCardTitles.forEach(item => {
-          const hour = +res[item.firstChild.innerText.substr(1)].time;
-          item.firstChild.classList.remove('hide');
-          let units, progress, color, title;
-          if(hour <= 24){
-            progress = Math.floor(hour/24*100);
-            color = 'green';
-            title = 'часы';
-            units =  Math.floor(hour);
-            if (units == 1){
-              title = 'час назад';
-              units = '';
-            }
-          }
-          if(24 < hour && hour <= 168){
-            color = 'blue';
-            title = 'дни';
-            progress = Math.floor(hour / 24 /7*100);
-            units =  Math.floor(hour/24);
-            if (units == 1){
-              title = 'вчера';
-              units = '';
-            }
-          }
-          if(168 < hour && hour <= 720){
-            color = 'red';
-            title = 'недели';
-            progress = Math.floor(hour / 168 /4*100);
-            units =  Math.floor(hour/168);
-
-          }
-          if(hour > 720 ){
-            color = 'black';
-            title = 'месяцы';
-            progress = Math.floor(hour / 720 /12*100);
-            units =  Math.floor(hour/720);
-
-          }
-          // item.style.backgroundColor = color;
-          // item.setAttribute('title' , title);
-
-          const progressAging = document.createElement('div');
-          progressAging.className = 'progress-aging';
-
-          const titleProg = document.createElement('div');
-          titleProg.className = 'title';
-          titleProg.innerText =  title;
-
-          const scale  = document.createElement('div');
-          scale .className = 'scale ';
-          scale .style.width = progress + '%';
-          scale .style.backgroundColor = color;
-
-          progressAging.appendChild(scale );
-          progressAging.appendChild(titleProg);
-
-
-          item.parentNode.parentNode.appendChild(progressAging);
-          item.parentNode.parentNode.setAttribute('title', units );
-      })
-
-    })
-    .catch(alert);
+    trello();
   }
 }
 
@@ -129,3 +46,112 @@ var authenticationFailure = function () {
   console.log('Failed authentication');
 };
 
+
+
+document.body.addEventListener('click', (event) => {
+  setTimeout(()=>{
+    console.log('click');
+    trello();
+  }, 2000)
+}, true);
+
+
+
+function trello() {
+  const a = document.querySelector('a.js-open-board');
+  const boardHref = a.getAttribute('href');
+  const board = boardHref.split('/')[2];
+
+  fetch('https://api.trello.com/1/boards/' + board + '/cards/?fields=dateLastActivity&fields=name,url,idShort&members=true&member_fields=fullName&key=05b346464415bc4c17b95472a274deee&token=' + trello_token)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (response) {
+      const now = Date.now();
+      response.forEach(item => {
+        let time = Math.round((now - Date.parse(item.dateLastActivity)) / (3600 * 1000 ));
+        item.time = time;
+        // console.log('name ' + item.name + ' idShort = ' + item.idShort + ' | время с последнего обновления - ' + time);
+        // console.log(item.url.substr(18));
+        arrAging[item.idShort] = item;
+      });
+      return arrAging;
+    })
+    .then(res => {
+      const listCardTitles = document.querySelectorAll('.list-card-title');
+      listCardTitles.forEach(item => {
+        const hour = +res[item.firstChild.innerText.substr(1)].time;
+        item.firstChild.classList.remove('hide');
+        let units, progress, color, title;
+        if (hour <= 24) {
+          progress = Math.floor(hour / 24 * 100);
+          color = 'green';
+          title = 'часы';
+          units = Math.floor(hour);
+          if (units == 1) {
+            title = 'час назад';
+            units = '';
+          }
+        }
+        if (24 < hour && hour <= 168) {
+          color = 'blue';
+          title = 'дни';
+          progress = Math.floor(hour / 24 / 7 * 100);
+          units = Math.floor(hour / 24);
+          if (units == 1) {
+            title = 'вчера';
+            units = '';
+          }
+        }
+        if (168 < hour && hour <= 720) {
+          color = 'red';
+          title = 'недели';
+          progress = Math.floor(hour / 168 / 4 * 100);
+          units = Math.floor(hour / 168);
+
+        }
+        if (hour > 720) {
+          color = 'black';
+          title = 'месяцы';
+          progress = Math.floor(hour / 720 / 12 * 100);
+          units = Math.floor(hour / 720);
+
+        }
+        // item.style.backgroundColor = color;
+        // item.setAttribute('title' , title);
+        const parent = item.parentNode.parentNode;
+        if (!parent.querySelector('.progress-aging')) {
+          const progressAging = document.createElement('div');
+          progressAging.className = 'progress-aging';
+
+          const titleProg = document.createElement('div');
+          titleProg.className = 'title';
+          titleProg.innerText = title;
+
+          const scale = document.createElement('div');
+          scale.className = 'scale ';
+          scale.style.width = progress + '%';
+          scale.style.backgroundColor = color;
+
+          progressAging.appendChild(scale);
+          progressAging.appendChild(titleProg);
+
+          parent.appendChild(progressAging);
+          parent.setAttribute('title', units);
+        } else {
+          const titleq = parent.querySelector('.title');
+          titleq.innerText = title;
+
+          const scale = parent.querySelector('.scale');
+          scale.style.width = progress + '%';
+          scale.style.backgroundColor = color;
+
+          parent.setAttribute('title', units);
+
+        }
+
+      })
+
+    })
+    .catch(alert);
+}
