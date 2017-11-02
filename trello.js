@@ -47,14 +47,21 @@ var authenticationFailure = function () {
 };
 
 
-
 document.body.addEventListener('click', (event) => {
-  setTimeout(()=>{
-    console.log('click');
-    trello();
-  }, 2000)
-}, true);
+  const arrListClass = [ 'js-close-window', 'js-open-board', 'list-card-details', 'compact-board-tile-link-text-name'];
+  let flag = false;
+  const classList = event.target.classList;
+console.log(event.target.classList);
+  arrListClass.forEach(item => {
+    flag += classList.contains(item);
+  });
 
+  if (flag) {
+    setTimeout(() => {
+      trello();
+    }, 2000)
+  }
+}, true);
 
 
 function trello() {
