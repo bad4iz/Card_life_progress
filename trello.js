@@ -9,6 +9,7 @@ if (!trello_token) {
   button.style.position = 'absolute';
   button.style.top = '200px';
   button.style.left = '200px';
+  button.style.zIndexn = '999';
   button.innerText = 'авторизовать в трело';
   button.onclick = () => {
 
